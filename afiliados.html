@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programa de Afiliados 2.0 - CED BRASIL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="icon" href="favicon.jpg" type="image/jpeg" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #E5E7EB;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        .spotify-green {
+            color: #1db954;
+        }
+
+        .bg-spotify-green {
+            background-color: #1db954;
+        }
+        
+        .hover-bg-spotify-green-darker:hover {
+            background-color: #1aa34a;
+        }
+
+        .card {
+            background-color: #181818;
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid #282828;
+            height: 100%;
+        }
+        
+        .card-glow {
+            will-change: transform, box-shadow;
+        }
+        
+        .card-glow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px 5px rgba(29, 185, 84, 0.25);
+            border-color: rgba(29, 185, 84, 0.4);
+        }
+
+        .button-glow {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 15px 2px rgba(29, 185, 84, 0.4);
+            will-change: transform, box-shadow;
+        }
+        
+        .button-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px 5px rgba(29, 185, 84, 0.6);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+        
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+         /* Tema claro */
+        body.light-theme {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: #f0f0f0;
+        }
+        body.light-theme .keep-colors,
+        body.light-theme img,
+        body.light-theme iframe {
+            filter: invert(1) hue-rotate(180deg);
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #1db954;
+            color: #000;
+            border-radius: 9999px;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .scroll-to-top.show {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <header class="bg-[#121212] py-4 sticky top-0 z-50 shadow-lg shadow-black/20">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+             <a href="index.html" class="text-3xl font-bold tracking-tighter text-white">CED <span class="spotify-green">BRASIL</span></a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="hover:text-spotify-green transition-colors">Início</a>
+                 <a href="https://ead.cedbrasilia.com.br" class="hidden md:inline-block bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                    Área do Aluno
+                </a>
+            </nav>
+            <div class="flex items-center">
+                <button id="themeToggle" class="text-yellow-400 text-2xl mr-4" aria-label="Alternar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="mobileMenuButton" class="md:hidden text-white">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+         <div id="mobileMenu" class="hidden md:hidden bg-[#181818] rounded-lg mt-4 mx-6 p-4 text-center">
+            <a href="index.html" class="block py-2 hover:text-spotify-green transition-colors">Início</a>
+            <a href="https://ead.cedbrasilia.com.br" class="block mt-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                Área do Aluno
+            </a>
+            <button id="mobileThemeToggle" class="block w-full text-center mt-4 py-2 text-yellow-400 text-lg" aria-label="Alternar tema">
+                <i class="fas fa-moon"></i> Tema
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-center py-20 md:py-32 px-6 reveal">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-tight mb-6">
+                Seja um Afiliado Oficial e <br> 
+                <span class="spotify-green">Fature Alto Conosco</span>.
+            </h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-300 mb-10">
+                Ganhe 80% de comissão vendendo cursos de alta qualidade, sem precisar de estoque ou investimento. Nós cuidamos de tudo para você focar no que importa: vender.
+            </p>
+            <a href="https://dashboard.kiwify.com/join/affiliate/zhTcssre" target="_blank" rel="noopener" class="inline-block button-glow bg-spotify-green text-black font-bold py-3 px-8 rounded-full hover-bg-spotify-green-darker">
+                Quero ser Afiliado Agora
+            </a>
+        </section>
+
+        <section class="py-20 px-6 reveal">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold tracking-tighter">Vantagens Exclusivas para Afiliados</h2>
+                    <p class="text-lg text-gray-400 mt-2">Tudo que você precisa para ter sucesso na palma da sua mão.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Benefícios -->
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-file-image"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Materiais sem marca d'água</h3>
+                        <p class="text-gray-400">Acesso a imagens e vídeos prontos para divulgar os cursos.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-play-circle"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Demonstrações gratuitas</h3>
+                        <p class="text-gray-400">Mostre aos seus leads uma prévia do conteúdo antes da compra.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-headset"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Suporte dedicado</h3>
+                        <p class="text-gray-400">Tire dúvidas rapidamente via WhatsApp e Discord.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-user-graduate"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Suporte aos alunos</h3>
+                        <p class="text-gray-400">Você apenas vende; a CED BRASIL cuida do atendimento completo.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-certificate"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Certificados válidos</h3>
+                        <p class="text-gray-400">Todos os cursos oferecem certificados reconhecidos em todo o país.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-mobile-screen-button"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Plataforma exclusiva</h3>
+                        <p class="text-gray-400">Os alunos estudam pelo celular ou computador sem complicações.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-users"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Comunidade de afiliados</h3>
+                        <p class="text-gray-400">Participe de um grupo privado para compartilhar dicas e estratégias.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-coins"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">80% de ganhos</h3>
+                        <p class="text-gray-400">Receba 80% de comissão em todos os produtos!</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-star"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Produtos de alta qualidade</h3>
+                        <p class="text-gray-400">Cursos com excelente reputação para facilitar suas vendas.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-eye"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Conta de Demonstração</h3>
+                        <p class="text-gray-400 mb-3">Experimente a plataforma antes de indicar.</p>
+                        <a href="https://ead.cedbrasilia.com.br/index.php?pag=entrar&token=1ce0d5e0-431a-11f0-8cdc-0eecf9347bc9" target="_blank" class="inline-block bg-spotify-green text-black font-bold px-4 py-2 rounded-lg text-sm hover-bg-spotify-green-darker transition shadow-md">Acessar</a>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"><i class="fas fa-bullhorn"></i></div>
+                        <h3 class="text-2xl font-bold mb-2">Página de Vendas Gratuita</h3>
+                        <p class="text-gray-400">A CED cria para você uma página de vendas/funil 100% gratuita para divulgar.</p>
+                    </div>
+                    <div class="card card-glow">
+                        <div class="bg-spotify-green bg-opacity-20 text-spotify-green w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                           <img src="https://placehold.co/48x48/1DB954/121212?text=K" alt="Logo da Kiwify" class="w-8 h-8 rounded-full keep-colors">
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Parceria Kiwify</h3>
+                        <p class="text-gray-400">Venda com a segurança da Kiwify, uma das maiores plataformas do Brasil.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-20 px-6 bg-[#181818] reveal">
+            <div class="container mx-auto">
+                 <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold tracking-tighter">Sua Primeira Venda em 20 Minutos</h2>
+                    <p class="text-lg text-gray-400 mt-2">Assista ao vídeo e aprenda o passo a passo para começar a lucrar agora mesmo.</p>
+                </div>
+                <div class="flex justify-center">
+                    <div class="w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl shadow-spotify-green/20">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/OlVSaro7gsg" title="Como fazer a sua primeira venda em 20 MINUTOS!" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 px-6 reveal">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold tracking-tighter">Nossos Produtos</h2>
+                    <p class="text-lg text-gray-400 mt-2">Confira a comissão para cada um dos nossos cursos de alta conversão.</p>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-gray-800">
+                    <table class="min-w-full text-left text-sm">
+                        <thead class="bg-gray-800">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 font-semibold text-white">Nome do Curso</th>
+                                <th scope="col" class="px-6 py-3 font-semibold text-white">Preço</th>
+                                <th scope="col" class="px-6 py-3 font-semibold text-spotify-green">Sua Comissão (80%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800 bg-[#181818]">
+                            <!-- Rows will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-20 px-6 bg-[#121212] reveal">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold tracking-tighter">Links Úteis para Afiliados</h2>
+                <p class="text-lg text-gray-400 mt-2 mb-8 max-w-2xl mx-auto">Acesse nossos grupos e materiais de divulgação para potencializar suas vendas.</p>
+                <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+                    <a href="https://drive.google.com/drive/folders/16pQ8SdgwrlvVJa5HLN3eIY2zjO1XlyBI?usp=sharing" target="_blank" rel="noopener" class="inline-flex items-center justify-center button-glow bg-spotify-green text-black font-bold px-6 py-3 rounded-full text-lg hover-bg-spotify-green-darker">
+                        <i class="fas fa-folder-open mr-2"></i> Materiais
+                    </a>
+                    <a href="https://chat.whatsapp.com/ELLrXpwBVY6Km9rnZKx1fZ" target="_blank" rel="noopener" class="inline-flex items-center justify-center bg-gray-700 text-white font-bold px-6 py-3 rounded-full text-lg hover:bg-gray-600 transition">
+                        <i class="fab fa-whatsapp mr-2"></i> Grupo de Afiliados
+                    </a>
+                    <a href="https://whatsapp.com/channel/0029VbBCJsV3QxS9Hdo6102Y" target="_blank" rel="noopener" class="inline-flex items-center justify-center bg-gray-700 text-white font-bold px-6 py-3 rounded-full text-lg hover:bg-gray-600 transition">
+                        <i class="fas fa-bullhorn mr-2"></i> Canal de Avisos
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 px-6 text-center bg-[#181818] reveal">
+            <div class="container mx-auto">
+                 <h2 class="text-4xl font-bold tracking-tighter">Pronto para Começar?</h2>
+                 <p class="text-lg text-gray-400 mt-2 mb-8 max-w-2xl mx-auto">Clique no botão abaixo, junte-se ao nosso time de afiliados e comece a transformar vidas (e seu bolso) hoje mesmo!</p>
+                 <a href="https://dashboard.kiwify.com/join/affiliate/zhTcssre" target="_blank" rel="noopener" class="inline-block button-glow bg-spotify-green text-black font-bold py-3 px-8 rounded-full hover-bg-spotify-green-darker">
+                    Tornar-se Afiliado Oficial
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <details class="max-w-4xl mx-auto text-left text-sm text-gray-400 mb-8 space-y-2 bg-gray-800/50 p-4 rounded-lg group">
+                <summary class="text-lg font-semibold text-white mb-2 list-none cursor-pointer flex items-center justify-between">
+                    <span>Políticas da CED BRASIL</span>
+                    <i class="fas fa-chevron-down transition-transform group-open:rotate-180"></i>
+                </summary>
+                <div class="mt-2 space-y-2 pt-2 border-t border-gray-700">
+                    <p>Na CED BRASIL, acreditamos que a educação de qualidade começa com responsabilidade, transparência e compromisso com nossos alunos. Por isso, estruturamos nossas políticas para garantir uma experiência segura, acessível e ética para todos.</p>
+                    <p><strong>Privacidade e Segurança:</strong> Todas as informações fornecidas por nossos alunos são tratadas com total confidencialidade. Utilizamos tecnologias seguras para proteger seus dados pessoais e garantir a integridade das transações realizadas em nossa plataforma.</p>
+                    <p><strong>Pagamentos e Assinaturas:</strong> Trabalhamos com o modelo de assinatura mensal recorrente, sem contrato de fidelidade. O cancelamento pode ser solicitado a qualquer momento, diretamente pela área do aluno ou pelo nosso suporte.</p>
+                </div>
+            </details>
+            <div class="text-2xl font-bold tracking-tighter mb-4 text-white">
+                <a href="#">CED <span class="spotify-green">BRASIL</span></a>
+            </div>
+            <p class="text-gray-400">&copy; <span id="currentYear"></span> CED BRASIL. Todos os direitos reservados.</p>
+             <div class="flex justify-center space-x-6 mt-4">
+                 <a href="https://www.facebook.com/people/CED-Brasil/61575889016332/" target="_blank" rel="noopener" class="text-gray-500 hover:text-spotify-green"><i class="fab fa-facebook-f text-lg"></i></a>
+                 <a href="https://instagram.com/cedbrasill" target="_blank" rel="noopener" class="text-gray-500 hover:text-spotify-green"><i class="fab fa-instagram text-lg"></i></a>
+                 <a href="https://wa.me/5561986660241" target="_blank" rel="noopener" class="text-gray-500 hover:text-spotify-green"><i class="fab fa-whatsapp text-lg"></i></a>
+             </div>
+        </div>
+    </footer>
+    
+    <button id="scrollTopBtn" aria-label="Voltar ao topo" class="scroll-to-top">&#8679;</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Theme Toggle
+        function applyTheme(isLight) {
+            document.body.classList.toggle('light-theme', isLight);
+            const icons = document.querySelectorAll('#themeToggle i, #mobileThemeToggle i');
+            icons.forEach(icon => {
+                icon.classList.toggle('fa-moon', !isLight);
+                icon.classList.toggle('fa-sun', isLight);
+            });
+        }
+
+        const storedTheme = localStorage.getItem('theme') === 'light';
+        applyTheme(storedTheme);
+        
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const isLight = !document.body.classList.contains('light-theme');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            applyTheme(isLight);
+        });
+        document.getElementById('mobileThemeToggle')?.addEventListener('click', () => {
+            const isLight = !document.body.classList.contains('light-theme');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            applyTheme(isLight);
+            mobileMenu.classList.add('hidden');
+        });
+
+        // Current Year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => observer.observe(el));
+        
+        // Populate Products Table
+        const products = [
+            { name: "Administração", price: "59,99" },
+            { name: "Análise e Desenvolvimento de Sistemas", price: "59,99" },
+            { name: "Excel PRO", price: "59,99" },
+            { name: "Inglês Kids", price: "59,99" },
+            { name: "Informática Essencial", price: "59,99" },
+            { name: "Marketing Digital", price: "59,99" },
+            { name: "Inglês Fluente", price: "59,99" },
+            { name: "Design Gráfico", price: "59,99" },
+            { name: "Operador de Micro", price: "59,99" },
+            { name: "Pacote Office", price: "59,99" },
+            { name: "Especialista em Marketing & Vendas 360º", price: "59,99" },
+        ];
+
+        const tableBody = document.querySelector('table tbody');
+        if(tableBody){
+            tableBody.innerHTML = '';
+            products.forEach(product => {
+                const commission = (parseFloat(product.price.replace(',', '.')) * 0.8).toFixed(2).replace('.', ',');
+                const row = `
+                    <tr class="hover:bg-gray-800 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">${product.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">R$ ${product.price}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-spotify-green">R$ ${commission}</td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+        
+        // Scroll to top button
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+</script>
+
+</body>
+</html>
