@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: ced-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: BASIC_B64
+        sync: false
+      - key: UNIDADE_ID
+        sync: false
+      - key: OM_BASE
+        sync: false
+      - key: CHATPRO_TOKEN
+        sync: false
+      - key: CHATPRO_URL
+        sync: false
+      - key: DISCORD_WEBHOOK
+        sync: false
+      - key: GOOGLE_CREDENTIALS_JSON
+        sync: false
+      - key: GOOGLE_SHEETS_CREDENTIALS_PATH
+        sync: false
+      - key: GOOGLE_SHEET_NAME
+        sync: false
+      - key: ASAAS_KEY
+        sync: false
+      - key: ASAAS_BASE_URL
+        sync: false
+
+staticSites:
+  - name: ced-site
+    buildCommand: ''
+    staticPublishPath: .
