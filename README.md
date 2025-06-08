@@ -19,8 +19,9 @@ O Render pode construir e publicar tanto a API quanto o site utilizando o arquiv
 2. Acesse [Render](https://render.com) e escolha **New Blueprint**.
 3. Informe a URL do seu repositório. O Render lerá o `render.yaml` e criará dois serviços:
    - **ced-api**: serviço web Python executando `uvicorn main:app`.
-   - **ced-site**: site estático que serve os arquivos HTML deste repositório.
+   - **ced-site**: site estático definido em `staticSites`, responsável por servir os arquivos HTML deste repositório.
 4. No painel do Render, configure as variáveis de ambiente necessárias para a API (`BASIC_B64`, `UNIDADE_ID`, `OM_BASE`, `CHATPRO_TOKEN`, etc.).
+   Essas chaves são armazenadas somente no Render e não ficam expostas no `render.yaml`.
 5. Realize o deploy. Após a publicação, associe seus domínios personalizados (`https://api.cedbrasilia.com.br` e `https://www.cedbrasilia.com.br`).
 
 Para mais detalhes consulte a [documentação do Render](https://render.com/docs/infrastructure-as-code).
